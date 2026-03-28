@@ -1,16 +1,20 @@
 import express from "express";
+import {connectDB} from "./configurations/db";
+import cors from "cors";
+import {config} from "./config";
+import {errorHandler} from "./middlewares/errorHandler";
 
-const app = express();
+export const app = express();
 
-// never use magic numbers in your port
-const PORT = 4000;
+connectDB();
 
-app.get("/", (req, res) => {
-    res.send("Welcome to the server");
+app.use(express.json());
+//app.use(cors(corsOptions));
+app.use(cors());
+
+app.listen(config.PORT, () => {
+    console.log(`Server started on port ${config.PORT}`);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-});
-
-export default app;
+// app.use("/api", router);
+app.use(errorHandler);
